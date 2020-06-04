@@ -173,4 +173,55 @@ class CBookmark extends \CBitrixComponent
     	$this->includeComponentTemplate($this->componentPage);
     	return $this;
     }
+
+    public function getData($id = false)
+    {
+        $arOrder = [];
+
+        $arFilter = [
+            'IBLOCK_CODE' => self::IBLOCK_CODE_BOOKMARK,
+            'ACTIVE' => 'Y',
+        ];
+        if($id) $arFilter['ID'] = $id;
+
+        $arSelect = [
+            'ID',
+            'NAME',
+            'DATE_CREATE',
+            'PROPERTY_FAVICON',
+            'PROPERTY_URL',
+            'PROPERTY_META_TITLE',
+            'PROPERTY_META_KEYWORDS',
+            'PROPERTY_META_DESCRIPTION',
+        ];
+
+        $arData = [];
+        $res = \CIBlockElement::GetList($arOrder, $arFilter, false, false, $arSelect);
+        while($row = $res->Fetch()) {
+            // убираем лишние поля
+            $row = array_filter(
+                $row, 
+                function($key) { 
+                    return !preg_match("/^PROPERTY\_.+\_VALUE\_ID$/i", $key); 
+                }, 
+                ARRAY_FILTER_USE_KEY
+            );
+            // переформировываем ключи
+            $row = array_combine(
+                array_map(
+                    function($key) {
+                        preg_match("/^PROPERTY\_(.+)\_VALUE$/i", $key, $matches);
+                        return $matches[1] ? $matches[1] : $key;
+                    },
+                    array_keys($row),
+                    $row
+                ), 
+                $row
+            );
+
+            $arData[] = $row;
+        }
+
+        return $id ? reset($arData) : $arData;
+    }
 }

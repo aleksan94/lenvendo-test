@@ -2,8 +2,7 @@
 
 use Bitrix\Main\UI\Extension;
 
-\Bitrix\Main\Loader::includeModule('iblock');
-\CBitrixComponent::includeComponentClass('lenvendo:bookmark.list');
+\CBitrixComponent::includeComponentClass('lenvendo:bookmark');
 
 /**
  * 
@@ -33,53 +32,12 @@ class CBookmarkList extends \CBitrixComponent
     	$this->includeComponentTemplate();
     }
 
-    private function getData()
+    public function getData($id = false)
     {
-        $arOrder = [];
+        $arData = \CBookmark::getData();
 
-        $arFilter = [
-            'IBLOCK_CODE' => \CBookmark::IBLOCK_CODE_BOOKMARK,
-            'ACTIVE' => 'Y',
-        ];
-
-        $arSelect = [
-            'ID',
-            'NAME',
-            'DATE_CREATE',
-            'PROPERTY_FAVICON',
-            'PROPERTY_URL',
-            'PROPERTY_META_TITLE',
-            'PROPERTY_META_KEYWORDS',
-            'PROPERTY_META_DESCRIPTION',
-        ];
-
-        $arData = [];
-        $res = \CIBlockElement::GetList($arOrder, $arFilter, false, false, $arSelect);
-        while($row = $res->Fetch()) {
-            // убираем лишние поля
-            $row = array_filter(
-                $row, 
-                function($key) { 
-                    return !preg_match("/^PROPERTY\_.+\_VALUE\_ID$/i", $key); 
-                }, 
-                ARRAY_FILTER_USE_KEY
-            );
-            // переформировываем ключи
-            $row = array_combine(
-                array_map(
-                    function($key) {
-                        preg_match("/^PROPERTY\_(.+)\_VALUE$/i", $key, $matches);
-                        return $matches[1] ? $matches[1] : $key;
-                    },
-                    array_keys($row),
-                    $row
-                ), 
-                $row
-            );
-            // DETAIL_PAGE_URL
-            $row['DETAIL_PAGE_URL'] = str_replace("#ELEMENT_ID#", $row['ID'], $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['item']);
-
-            $arData[] = $row;
+        foreach($arData as $key => $val) {
+            $arData[$key]['DETAIL_PAGE_URL'] = str_replace("#ELEMENT_ID#", $val['ID'], $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['item']);
         }
 
         return $arData;

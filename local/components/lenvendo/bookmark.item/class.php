@@ -1,12 +1,18 @@
 <?if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
+use Bitrix\Main\UI\Extension;
+
+\CBitrixComponent::includeComponentClass('lenvendo:bookmark');
+
 /**
  * 
  */
 class CBookmarkList extends \CBitrixComponent
 {
+    private $elementID = 0;
+
 	/**
-	 * обработка входящих параметро
+	 * обработка входящих параметров
 	 * @param  array  $arParams [description]
 	 * @return array           [description]
 	 */
@@ -20,6 +26,24 @@ class CBookmarkList extends \CBitrixComponent
      */
     public function executeComponent()
     {
+        $this->prepareResult();
+
+        Extension::load('ui.bootstrap4');
+
     	$this->includeComponentTemplate();
+    }
+
+    public function getData()
+    {
+        $elementID = (int)$this->arParams['ELEMENT_ID'];
+        $arData = \CBookmark::getData($elementID);
+        return $arData;
+    }
+
+    private function prepareResult()
+    {
+        $this->arResult = [
+            'ITEM' => $this->getData()
+        ];
     }
 }
