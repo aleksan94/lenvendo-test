@@ -1,5 +1,7 @@
 <?if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
+use Bitrix\Main\UI\Extension;
+
 \Bitrix\Main\Loader::includeModule('iblock');
 \CBitrixComponent::includeComponentClass('lenvendo:bookmark.list');
 
@@ -24,6 +26,9 @@ class CBookmarkList extends \CBitrixComponent
     public function executeComponent()
     {
         $this->prepareResult();
+
+        //\CJSCore::Init(["jquery"]);
+        Extension::load('ui.bootstrap4');
 
     	$this->includeComponentTemplate();
     }
@@ -71,6 +76,8 @@ class CBookmarkList extends \CBitrixComponent
                 ), 
                 $row
             );
+            // DETAIL_PAGE_URL
+            $row['DETAIL_PAGE_URL'] = str_replace("#ELEMENT_ID#", $row['ID'], $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['item']);
 
             $arData[] = $row;
         }

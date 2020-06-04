@@ -3,6 +3,6 @@
 $APPLICATION->IncludeComponent(
 	'lenvendo:bookmark.list',
 	'',
-	[],
+	$arResult,
 	$component
 );
