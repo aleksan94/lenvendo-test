@@ -19,7 +19,7 @@
 					<? foreach($arResult['ITEMS'] as $item): ?>
 						<tr>
 							<td><?=$item['DATE_CREATE']?></td>
-							<td><?=$item['FAVICON']?></td>
+							<td><img src="<?=$item['FAVICON']?>"></td>
 							<td><a href="<?=$item['URL']?>"><?=$item['URL']?></a></td>
 							<td><a href="<?=$item['DETAIL_PAGE_URL']?>"><?=$item['NAME']?></a></td>	
 						</tr>
