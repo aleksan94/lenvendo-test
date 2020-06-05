@@ -24,6 +24,8 @@ class CBookmarkAdd extends \CBitrixComponent
      */
     public function executeComponent()
     {   
+        $this->prepareResult();
+
         if($this->isAjax()) {
             $action = $this->getAjaxAction();
 
@@ -31,8 +33,6 @@ class CBookmarkAdd extends \CBitrixComponent
 
             die();
         }
-
-        $this->prepareResult();
 
         Extension::load('ui.bootstrap4');
 
@@ -70,16 +70,21 @@ class CBookmarkAdd extends \CBitrixComponent
         ];
 
         $blEl = new \CIBlockElement();
-        if($blEl->Add($arFields)) {
-            $this->ajaxOk();            
+        if($id = $blEl->Add($arFields)) {
+            $this->ajaxOk(['DETAIL_PAGE_URL' => $this->getDetailPageUrl($id)]);            
         }
         else $this->ajaxError($blEl->LAST_ERROR);
     }
 
     public function prepareUrl($url)
     {
-        $clearUrl = trim( preg_replace("/^.+?\:\/\//", '', $url) );
+        $clearUrl = trim( trim( preg_replace("/^.+?\:\/\//", '', $url) ), '/');
         return "https://".$clearUrl;
+    }
+
+    private function getDetailPageUrl($id)
+    {
+        return $id ? str_replace("#ELEMENT_ID#", $id, $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['item']) : false;
     }
 
     private function checkUrlExists($url)
@@ -108,20 +113,28 @@ class CBookmarkAdd extends \CBitrixComponent
         if(!$content) return false;
 
         // favicon
-        preg_match("/\<link .*href=\"(.+?)\" .*rel=\"icon\"/", $content, $matches);
+        preg_match("/\<link .*?href=\"(.+?)\" .*?rel=\".*?icon.*?\"/", $content, $matches);
         $favicon = $matches[1];
+        if(preg_match("/.*[\<\>\,\=!\\\].*/", $favicon)) $favicon = false;
+        if(!$favicon) {
+            preg_match("/\<link .*?rel=\".*?icon.*?\" .*?href=\"(.+?)\"/", $content, $matches);
+            $favicon = trim( trim($matches[1]), '/');
+            if(preg_match("/.*[\<\>\,\=!\\\].*/", $favicon)) $favicon = false;
+        }
+        if($favicon && !preg_match("/^https?\:\/\//", $favicon))
+            $favicon = $url."/".$favicon;
 
         // title
         preg_match("/\<title\>(.+?)\<\/title\>/", $content, $matches);
-        $title = trim($matches[1]);
+        $title = iconv('CP1251', 'UTF-8', trim($matches[1]));
 
         // description
         preg_match("/<meta .*name=\"description\" .*content=\"(.+?)\"/", $content, $matches);
-        $description = $matches[1];
+        $description = iconv('CP1251', 'UTF-8', trim($matches[1]));
 
-        // description
+        // keywords
         preg_match("/<meta .*name=\"keywords\" .*content=\"(.+?)\"/", $content, $matches);
-        $keywords = $matches[1];
+        $keywords = iconv('CP1251', 'UTF-8', trim($matches[1]));
 
         return [
             'FAVICON' => $favicon,
