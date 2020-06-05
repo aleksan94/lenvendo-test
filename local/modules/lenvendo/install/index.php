@@ -222,8 +222,11 @@ Class Lenvendo extends \CModule
 				$oBlock->Update($iblockID, $arFields);
 			}
 
-			// добавляем/обновляем св-ва
 			if($iblockID) {
+				// права на запись
+				\CIBlock::SetPermission($IBLOCK_ID, ["1"=>"X", "2"=>"W"]);
+
+				// добавляем/обновляем св-ва
 				$oBlockProperty = new \CIBlockProperty();
 
 				$arProperties = [];
