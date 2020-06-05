@@ -55,6 +55,7 @@ class CBookmarkAdd extends \CBitrixComponent
         if($this->checkUrlExists($url)) $this->ajaxError('Указанный URL уже существует в БД');
 
         $arPageData = $this->getPageData($url);
+        if(!$arPageData) $this->ajaxError("Содержимое страницы $url не получено");
 
         $arFields = [
             'IBLOCK_ID' => \CBookmark::getIBlockID(),
@@ -73,14 +74,12 @@ class CBookmarkAdd extends \CBitrixComponent
             $this->ajaxOk();            
         }
         else $this->ajaxError($blEl->LAST_ERROR);
-
-        //$this->ajaxOk($arPageData);
     }
 
     public function prepareUrl($url)
     {
-        $httpExists = preg_match("/^https?\:\/\//", $url);
-        return $httpExists ? $url : "http://".$url;
+        $clearUrl = trim( preg_replace("/^.+?\:\/\//", '', $url) );
+        return "https://".$clearUrl;
     }
 
     private function checkUrlExists($url)
@@ -106,6 +105,7 @@ class CBookmarkAdd extends \CBitrixComponent
     public function getPageData($url)
     {
         $content = file_get_contents($url);
+        if(!$content) return false;
 
         // favicon
         preg_match("/\<link .*href=\"(.+?)\" .*rel=\"icon\"/", $content, $matches);
