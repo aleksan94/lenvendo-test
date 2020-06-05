@@ -1,5 +1,11 @@
 <?if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();?>
 
+<? $APPLICATION->SetTitle(''); ?>
+
+<div class="mb-2">
+	<a href="<?=$arResult['LIST_PAGE_URL']?>"><< Список</a>
+</div>
+
 <h1><?=$arResult['ITEM']['NAME']?></h1>
 
 <div class="bookmark-item">
@@ -10,7 +16,7 @@
 
 	<div class="bookmark-item__row d-flex">
 		<div>Favicon</div>
-		<div><?=$arResult['ITEM']['FAVICON']?></div>
+		<div><a href="<?=$arResult['ITEM']['FAVICON']?>" target="_blank"><img src="<?=$arResult['ITEM']['FAVICON']?>"></a></div>
 	</div>
 
 	<div class="bookmark-item__row d-flex">

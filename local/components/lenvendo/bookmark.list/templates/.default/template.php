@@ -1,12 +1,12 @@
 <?if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();?>
 
-<h1>List</h1>
+<? $APPLICATION->SetTitle('Список закладок'); ?>
 
 <div>
-	<div>
+	<div class="d-flex justify-content-end">
 		<button class="btn btn-info" onclick="location.href='<?=$arResult['ADD_PAGE_URL']?>'">Добавить</button>
 	</div>
-	<div>
+	<div class="mt-3">
 		<? if($arResult['ITEMS']): ?>
 			<table class="table table-hover">
 				<thead>
@@ -19,7 +19,7 @@
 					<? foreach($arResult['ITEMS'] as $item): ?>
 						<tr>
 							<td><?=$item['DATE_CREATE']?></td>
-							<td><img src="<?=$item['FAVICON']?>"></td>
+							<td class="text-center"><a href="<?=$item['FAVICON']?>" target="_blank"><img src="<?=$item['FAVICON']?>"></a></td>
 							<td><a href="<?=$item['URL']?>"><?=$item['URL']?></a></td>
 							<td><a href="<?=$item['DETAIL_PAGE_URL']?>"><?=$item['NAME']?></a></td>	
 						</tr>
