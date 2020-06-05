@@ -182,7 +182,9 @@ class CBookmark extends \CBitrixComponent
 
     public function getData($id = false)
     {
-        $arOrder = [];
+        $arOrder = [
+            'DATE_CREATE' => 'DESC'
+        ];
 
         $arFilter = [
             'IBLOCK_CODE' => self::IBLOCK_CODE_BOOKMARK,
