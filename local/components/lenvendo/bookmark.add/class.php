@@ -87,6 +87,10 @@ class CBookmarkAdd extends \CBitrixComponent
     {
         $content = file_get_contents($url);
 
+        // favicon
+        preg_match("/\<link .*href=\"(.+?)\" .*rel=\"icon\"/", $content, $matches);
+        $favicon = $matches[1];
+
         // title
         preg_match("/\<title\>(.+?)\<\/title\>/", $content, $matches);
         $title = trim($matches[1]);
@@ -95,7 +99,16 @@ class CBookmarkAdd extends \CBitrixComponent
         preg_match("/<meta .*name=\"description\" .*content=\"(.+?)\"/", $content, $matches);
         $description = $matches[1];
 
-        return $description;
+        // description
+        preg_match("/<meta .*name=\"keywords\" .*content=\"(.+?)\"/", $content, $matches);
+        $keywords = $matches[1];
+
+        return [
+            'FAVICON' => $favicon,
+            'TITLE' => $title,
+            'DESCRIPTION' => $description,
+            'KEYWORDS' => $keywords,
+        ];
     }
 
     private function isAjax()
