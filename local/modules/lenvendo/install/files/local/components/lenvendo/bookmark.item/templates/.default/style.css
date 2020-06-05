@@ -1,0 +1,10 @@
+.bookmark-item .bookmark-item__row {
+	margin: 4px 0;
+}
+.bookmark-item .bookmark-item__row > div:first-child {
+	width: 30%;
+	font-weight: bold;
+}
+.bookmark-item .bookmark-item__row > div:last-child {
+	width: 70%;
+}
