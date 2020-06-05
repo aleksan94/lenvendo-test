@@ -24,7 +24,7 @@ const CBookmarkAdd =
 					let message = !!res.message ? res.message : false;
 
 					if(isOk) {
-						let url = !!data && !!data['DETAIL_PAGE_URL'] && data['DETAIL_PAGE_URL'].length > 0;
+						let url = !!data && !!data['DETAIL_PAGE_URL'] && data['DETAIL_PAGE_URL'].length > 0 ? data['DETAIL_PAGE_URL'] : false;
 						if(!!url)
 							window.location.href = url;
 					}

@@ -79,7 +79,7 @@ class CBookmarkAdd extends \CBitrixComponent
     public function prepareUrl($url)
     {
         $clearUrl = trim( trim( preg_replace("/^.+?\:\/\//", '', $url) ), '/');
-        return "https://".$clearUrl;
+        return "http://".$clearUrl;
     }
 
     private function getDetailPageUrl($id)
@@ -112,6 +112,12 @@ class CBookmarkAdd extends \CBitrixComponent
         $content = file_get_contents($url);
         if(!$content) return false;
 
+        // charset
+        preg_match("/\<meta .*?charset=\"(.+?)\"/", $content, $matches);
+        $charset = trim($matches[1]);
+        // если не найден или в строке содержится utf, то не конвертируем значения
+        if( !$charset || $charset && strpos(strtolower($charset), 'utf') !== false ) $charset = false;
+
         // favicon
         preg_match("/\<link .*?href=\"(.+?)\" .*?rel=\".*?icon.*?\"/", $content, $matches);
         $favicon = $matches[1];
@@ -126,22 +132,28 @@ class CBookmarkAdd extends \CBitrixComponent
 
         // title
         preg_match("/\<title\>(.+?)\<\/title\>/", $content, $matches);
-        $title = iconv('CP1251', 'UTF-8', trim($matches[1]));
+        $title = $matches[1];
 
         // description
         preg_match("/<meta .*name=\"description\" .*content=\"(.+?)\"/", $content, $matches);
-        $description = iconv('CP1251', 'UTF-8', trim($matches[1]));
+        $description = $matches[1];
 
         // keywords
         preg_match("/<meta .*name=\"keywords\" .*content=\"(.+?)\"/", $content, $matches);
-        $keywords = iconv('CP1251', 'UTF-8', trim($matches[1]));
+        $keywords = $matches[1];
 
-        return [
+        $arData = [
             'FAVICON' => $favicon,
             'TITLE' => $title,
             'DESCRIPTION' => $description,
             'KEYWORDS' => $keywords,
         ];
+
+        // если кодировка отличная от UTF-8 - конвертируем
+        if($charset) 
+            $arData = array_map(function($el) use ($charset) { return iconv($charset, 'UTF-8', $el); }, $arData);
+
+        return $arData;
     }
 
     private function isAjax()
