@@ -79,7 +79,7 @@ class CBookmarkAdd extends \CBitrixComponent
     public function prepareUrl($url)
     {
         $clearUrl = trim( trim( preg_replace("/^.+?\:\/\//", '', $url) ), '/');
-        return "http://".$clearUrl;
+        return "https://".$clearUrl;
     }
 
     private function getDetailPageUrl($id)
@@ -109,14 +109,42 @@ class CBookmarkAdd extends \CBitrixComponent
      */
     public function getPageData($url)
     {
-        $content = file_get_contents($url);
-        if(!$content) return false;
+        \Bitrix\Main\Loader::includeModule('lenvendo');
 
-        // charset
-        preg_match("/\<meta .*?charset=\"(.+?)\"/", $content, $matches);
-        $charset = trim($matches[1]);
-        // если не найден или в строке содержится utf, то не конвертируем значения
-        if( !$charset || $charset && strpos(strtolower($charset), 'utf') !== false ) $charset = false;
+        $html = file_get_contents($url);
+        if(!$html) return false;
+
+        // phpQuery DOM init
+        \phpQuery::newDocument($html);
+        // charset        
+        $charset = pq('meta[charset]"')->attr('charset');
+        // если кодировка не UTF-8, то конвертируем
+        if($charset && strpos(strtolower($charset), 'utf') === false) {
+            $html = iconv($charset, 'UTF-8', $html);
+            \phpQuery::newDocument($html);
+        }
+        // favicon
+        $favicon = pq('link[rel*="icon"]')->attr('href');
+        if(substr($favicon, 0, 1) === '/' && substr($favicon, 1, 1) !== '/')
+            $favicon = $url."/".trim($favicon, '/');
+        // title
+        $title = pq('title')->text();
+        // description
+        $description = pq('meta[name="description"]')->attr('content');
+        // keywords
+        $keywords = pq('meta[name="keywords"]')->attr('content');
+
+        $arData = [
+            'FAVICON' => $favicon,
+            'TITLE' => $title,
+            'DESCRIPTION' => $description,
+            'KEYWORDS' => $keywords,
+        ];
+
+        return $arData;
+
+
+        die();
 
         // favicon
         preg_match("/\<link .*?href=\"(.+?)\" .*?rel=\".*?icon.*?\"/", $content, $matches);
