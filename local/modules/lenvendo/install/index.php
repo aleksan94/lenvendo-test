@@ -255,6 +255,10 @@ Class Lenvendo extends \CModule
 						'NAME' => 'META Keywords',
 						'CODE' => 'META_KEYWORDS',
 					],
+					[
+						'NAME' => 'Пароль',
+						'CODE' => 'PASSWORD',
+					],
 				];
 
 				foreach($arUpdateProperties as $prop) {
