@@ -20,7 +20,11 @@
 					<? foreach($arResult['ITEMS'] as $item): ?>
 						<tr>
 							<td><?=$item['DATE_CREATE']?></td>
-							<td class="text-center"><a href="<?=$item['FAVICON']?>" target="_blank"><img src="<?=$item['FAVICON']?>" width="16" height="16"></a></td>
+							<td class="text-center">
+								<? if($item['FAVICON']): ?>
+								<a href="<?=$item['FAVICON']?>" target="_blank"><img src="<?=$item['FAVICON']?>" width="16" height="16"></a>
+								<? endif; ?>
+							</td>
 							<td><a href="<?=$item['URL']?>"><?=$item['URL']?></a></td>
 							<td><a href="<?=$item['DETAIL_PAGE_URL']?>"><?=$item['NAME']?></a></td>	
 						</tr>

@@ -16,7 +16,11 @@
 
 	<div class="bookmark-item__row d-flex">
 		<div>Favicon</div>
-		<div><a href="<?=$arResult['ITEM']['FAVICON']?>" target="_blank"><img src="<?=$arResult['ITEM']['FAVICON']?>" width="16" height="16"></a></div>
+		<div>
+			<? if($arResult['ITEM']['FAVICON']): ?>
+			<a href="<?=$arResult['ITEM']['FAVICON']?>" target="_blank"><img src="<?=$arResult['ITEM']['FAVICON']?>" width="16" height="16"></a>
+			<? endif; ?>
+		</div>
 	</div>
 
 	<div class="bookmark-item__row d-flex">
