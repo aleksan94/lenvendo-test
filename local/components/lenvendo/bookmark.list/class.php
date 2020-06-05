@@ -46,6 +46,7 @@ class CBookmarkList extends \CBitrixComponent
     private function prepareResult()
     {
         $this->arResult = [
+            'ADD_PAGE_URL' => $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['add'],
             'ITEMS' => $this->getData()
         ];
     }

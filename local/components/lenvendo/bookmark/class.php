@@ -14,6 +14,7 @@ class CBookmark extends \CBitrixComponent
 	private $arDefaultUrlTemplates404 = [
 	    'list' => 'index.php',
 	    'item' => '#ELEMENT_ID#/',
+        'add' => 'add/',
 	];
 	// псевдонимы по умолчанию ля ЧПУ
 	private $arDefaultVariableAliases404 = [];
@@ -107,6 +108,7 @@ class CBookmark extends \CBitrixComponent
     		$arUrlTemplates = [
     			"list" => htmlspecialcharsbx($APPLICATION->GetCurPage()),
 				"item" => htmlspecialcharsbx($APPLICATION->GetCurPage()."?".$arVariableAliases["ELEMENT_ID"]."=#ELEMENT_ID#"),
+                "add" => htmlspecialcharsbx($APPLICATION->GetCurPage()."?add=Y"),
     		];
     	}
 
