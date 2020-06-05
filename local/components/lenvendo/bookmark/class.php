@@ -9,6 +9,8 @@ class CBookmark extends \CBitrixComponent
 {
 	// символьный код ИБ закладки
 	const IBLOCK_CODE_BOOKMARK = 'bookmark';
+    // ID ИБ
+    private static $IBLOCK_ID;
 
 	// пути по умолчанию для ЧПУ
 	private $arDefaultUrlTemplates404 = [
@@ -227,5 +229,14 @@ class CBookmark extends \CBitrixComponent
         }
 
         return $id ? reset($arData) : $arData;
+    }
+
+    public function getIBlockID()
+    {
+        if(!self::$IBLOCK_ID) {
+            \Bitrix\Main\Loader::includeModule('iblock');
+            self::$IBLOCK_ID = (int)\CIBlock::GetList([], ['CODE' => self::IBLOCK_CODE_BOOKMARK])->Fetch()['ID'];
+        }
+        return self::$IBLOCK_ID;
     }
 }

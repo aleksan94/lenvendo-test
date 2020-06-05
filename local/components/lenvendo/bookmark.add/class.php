@@ -48,13 +48,33 @@ class CBookmarkAdd extends \CBitrixComponent
 
     public function addUrl()
     {
+        \Bitrix\Main\Loader::includeModule('iblock');
+
         $url = $this->prepareUrl($_REQUEST['URL']);
 
         if($this->checkUrlExists($url)) $this->ajaxError('Указанный URL уже существует в БД');
 
         $arPageData = $this->getPageData($url);
 
-        $this->ajaxOk($arPageData);
+        $arFields = [
+            'IBLOCK_ID' => \CBookmark::getIBlockID(),
+            'ACTIVE' => 'Y',
+            'NAME' => $arPageData['TITLE'], // МОЖЕТ НЕ БЫТЬ TITLE !!! надо поправить
+            'PROPERTY_VALUES' => [
+                'URL' => $url,
+                'FAVICON' => $arPageData['FAVICON'],
+                'META_DESCRIPTION' => $arPageData['DESCRIPTION'],
+                'META_KEYWORDS' => $arPageData['KEYWORDS'],
+            ]
+        ];
+
+        $blEl = new \CIBlockElement();
+        if($blEl->Add($arFields)) {
+            $this->ajaxOk();            
+        }
+        else $this->ajaxError($blEl->LAST_ERROR);
+
+        //$this->ajaxOk($arPageData);
     }
 
     public function prepareUrl($url)
