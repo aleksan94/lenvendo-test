@@ -32,9 +32,9 @@ class CBookmarkList extends \CBitrixComponent
     	$this->includeComponentTemplate();
     }
 
-    public function getData($id = false)
+    public function getData()
     {
-        $arData = \CBookmark::getData();
+        $arData = \CBookmark::getData(false, $this->getCurPage(), $this->getPageSize());
 
         foreach($arData as $key => $val) {
             $arData[$key]['DETAIL_PAGE_URL'] = str_replace("#ELEMENT_ID#", $val['ID'], $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['item']);
@@ -49,6 +49,23 @@ class CBookmarkList extends \CBitrixComponent
             'ADD_PAGE_URL' => $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['add'],
             'ITEMS' => $this->getData(),
             'COUNT_ITEMS' => \CBookmark::getCountItems(),
+            'PAGE_SIZE' => $this->getPageSize(),
         ];
+    }
+
+    public function getCurPage()
+    {
+        $pageKey = $this->getPageKey();
+        return ($p = (int)$_GET[$pageKey]) ? $p : 1;
+    }
+
+    public function getPageKey()
+    {
+        return ($k = $this->$arParams['PAGE_KEY']) ? $k : 'page';
+    }
+
+    public function getPageSize()
+    {
+        return ($s = (int)$this->arParams['PAGE_SIZE']) ? $s : 5;
     }
 }

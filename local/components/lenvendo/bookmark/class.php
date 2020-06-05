@@ -26,7 +26,8 @@ class CBookmark extends \CBitrixComponent
 
 	// списки переменных
 	private $arComponentVariables = [
-		'ELEMENT_ID'
+		'ELEMENT_ID',
+        'add'
 	];
 
 	// результирующие шаблоны путей
@@ -135,6 +136,8 @@ class CBookmark extends \CBitrixComponent
     	else {
     		if(isset($this->arVariables["ELEMENT_ID"]) && intval($this->arVariables["ELEMENT_ID"]) > 0)
 				$componentPage = 'item';
+            else if(isset($this->arVariables["add"]) && $this->arVariables["add"] === 'Y') 
+                $componentPage = 'add';
 			else 
 				$componentPage = 'list';
     	}
@@ -180,7 +183,7 @@ class CBookmark extends \CBitrixComponent
     	return $this;
     }
 
-    public function getData($id = false)
+    public function getData($id = false, $page = 1, $nPageSize = 20)
     {
         $arOrder = [
             'DATE_CREATE' => 'DESC'
@@ -191,6 +194,14 @@ class CBookmark extends \CBitrixComponent
             'ACTIVE' => 'Y',
         ];
         if($id) $arFilter['ID'] = $id;
+
+        $arNavParams = false;
+        if(!$id) {
+            $arNavParams = [
+                'iNumPage' => $page,
+                'nPageSize' => $nPageSize
+            ];
+        }
 
         $arSelect = [
             'ID',
@@ -204,7 +215,7 @@ class CBookmark extends \CBitrixComponent
         ];
 
         $arData = [];
-        $res = \CIBlockElement::GetList($arOrder, $arFilter, false, false, $arSelect);
+        $res = \CIBlockElement::GetList($arOrder, $arFilter, false, $arNavParams, $arSelect);
         while($row = $res->Fetch()) {
             // убираем лишние поля
             $row = array_filter(
@@ -251,5 +262,5 @@ class CBookmark extends \CBitrixComponent
         \Bitrix\Main\Loader::includeModule('iblock');
 
         return (int)\CIBlockElement::GetList([], ['IBLOCK_CODE' => self::IBLOCK_CODE_BOOKMARK, 'ACTIVE' => 'Y'], []);
-    }
+    }    
 }

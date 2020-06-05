@@ -35,9 +35,9 @@
 			'lenvendo:pagination', 
 			'bookmark', 
 			[
-				//'PAGE_SIZE' => 3,
+				'PAGE_SIZE' => $arResult['PAGE_SIZE'],
 				//'MAX_PAGES' => 5, 
-				'PAGE_KEY' => 'p', 
+				'PAGE_KEY' => 'page', 
 				'COUNT_ITEMS' => $arResult['COUNT_ITEMS'],
 			]); 
 		?>
