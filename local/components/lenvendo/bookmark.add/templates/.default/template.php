@@ -1,3 +1,7 @@
+<?if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();?>
+
+<? $APPLICATION->SetTitle('Добавить закладку'); ?>
+
 <div>
 	<div class="mb-2">
 		<a href="<?=$arResult['LIST_PAGE_URL']?>"><< Список</a>
