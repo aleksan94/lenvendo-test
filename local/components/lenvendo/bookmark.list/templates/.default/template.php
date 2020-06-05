@@ -6,6 +6,7 @@
 	<div class="d-flex justify-content-end">
 		<button class="btn btn-info" onclick="location.href='<?=$arResult['ADD_PAGE_URL']?>'">Добавить</button>
 	</div>
+
 	<div class="mt-3">
 		<? if($arResult['ITEMS']): ?>
 			<table class="table table-hover">
@@ -27,5 +28,18 @@
 				</tbody>
 			</table>
 		<? endif; ?>
+	</div>
+
+	<div>
+		<? $APPLICATION->IncludeComponent(
+			'lenvendo:pagination', 
+			'bookmark', 
+			[
+				//'PAGE_SIZE' => 3,
+				//'MAX_PAGES' => 5, 
+				'PAGE_KEY' => 'p', 
+				'COUNT_ITEMS' => $arResult['COUNT_ITEMS'],
+			]); 
+		?>
 	</div>
 </div>

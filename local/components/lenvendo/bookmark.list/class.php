@@ -47,7 +47,8 @@ class CBookmarkList extends \CBitrixComponent
     {
         $this->arResult = [
             'ADD_PAGE_URL' => $this->arParams['FOLDER'].$this->arParams['URL_TEMPLATES']['add'],
-            'ITEMS' => $this->getData()
+            'ITEMS' => $this->getData(),
+            'COUNT_ITEMS' => \CBookmark::getCountItems(),
         ];
     }
 }

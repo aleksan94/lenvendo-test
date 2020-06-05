@@ -241,4 +241,15 @@ class CBookmark extends \CBitrixComponent
         }
         return self::$IBLOCK_ID;
     }
+
+    /**
+     * количество закладок
+     * @return int
+     */
+    public function getCountItems()
+    {
+        \Bitrix\Main\Loader::includeModule('iblock');
+
+        return (int)\CIBlockElement::GetList([], ['IBLOCK_CODE' => self::IBLOCK_CODE_BOOKMARK, 'ACTIVE' => 'Y'], []);
+    }
 }
