@@ -9,11 +9,14 @@ class CBookmark extends \CBitrixComponent
 {
 	// символьный код ИБ закладки
 	const IBLOCK_CODE_BOOKMARK = 'bookmark';
+    // ID ИБ
+    private static $IBLOCK_ID;
 
 	// пути по умолчанию для ЧПУ
 	private $arDefaultUrlTemplates404 = [
 	    'list' => 'index.php',
 	    'item' => '#ELEMENT_ID#/',
+        'add' => 'add/',
 	];
 	// псевдонимы по умолчанию ля ЧПУ
 	private $arDefaultVariableAliases404 = [];
@@ -23,7 +26,8 @@ class CBookmark extends \CBitrixComponent
 
 	// списки переменных
 	private $arComponentVariables = [
-		'ELEMENT_ID'
+		'ELEMENT_ID',
+        'add'
 	];
 
 	// результирующие шаблоны путей
@@ -107,6 +111,7 @@ class CBookmark extends \CBitrixComponent
     		$arUrlTemplates = [
     			"list" => htmlspecialcharsbx($APPLICATION->GetCurPage()),
 				"item" => htmlspecialcharsbx($APPLICATION->GetCurPage()."?".$arVariableAliases["ELEMENT_ID"]."=#ELEMENT_ID#"),
+                "add" => htmlspecialcharsbx($APPLICATION->GetCurPage()."?add=Y"),
     		];
     	}
 
@@ -131,6 +136,8 @@ class CBookmark extends \CBitrixComponent
     	else {
     		if(isset($this->arVariables["ELEMENT_ID"]) && intval($this->arVariables["ELEMENT_ID"]) > 0)
 				$componentPage = 'item';
+            else if(isset($this->arVariables["add"]) && $this->arVariables["add"] === 'Y') 
+                $componentPage = 'add';
 			else 
 				$componentPage = 'list';
     	}
@@ -176,15 +183,25 @@ class CBookmark extends \CBitrixComponent
     	return $this;
     }
 
-    public function getData($id = false)
+    public function getData($id = false, $page = 1, $nPageSize = 20)
     {
-        $arOrder = [];
+        $arOrder = [
+            'DATE_CREATE' => 'DESC'
+        ];
 
         $arFilter = [
             'IBLOCK_CODE' => self::IBLOCK_CODE_BOOKMARK,
             'ACTIVE' => 'Y',
         ];
         if($id) $arFilter['ID'] = $id;
+
+        $arNavParams = false;
+        if(!$id) {
+            $arNavParams = [
+                'iNumPage' => $page,
+                'nPageSize' => $nPageSize
+            ];
+        }
 
         $arSelect = [
             'ID',
@@ -198,7 +215,7 @@ class CBookmark extends \CBitrixComponent
         ];
 
         $arData = [];
-        $res = \CIBlockElement::GetList($arOrder, $arFilter, false, false, $arSelect);
+        $res = \CIBlockElement::GetList($arOrder, $arFilter, false, $arNavParams, $arSelect);
         while($row = $res->Fetch()) {
             // убираем лишние поля
             $row = array_filter(
@@ -226,4 +243,24 @@ class CBookmark extends \CBitrixComponent
 
         return $id ? reset($arData) : $arData;
     }
+
+    public function getIBlockID()
+    {
+        if(!self::$IBLOCK_ID) {
+            \Bitrix\Main\Loader::includeModule('iblock');
+            self::$IBLOCK_ID = (int)\CIBlock::GetList([], ['CODE' => self::IBLOCK_CODE_BOOKMARK])->Fetch()['ID'];
+        }
+        return self::$IBLOCK_ID;
+    }
+
+    /**
+     * количество закладок
+     * @return int
+     */
+    public function getCountItems()
+    {
+        \Bitrix\Main\Loader::includeModule('iblock');
+
+        return (int)\CIBlockElement::GetList([], ['IBLOCK_CODE' => self::IBLOCK_CODE_BOOKMARK, 'ACTIVE' => 'Y'], []);
+    }    
 }
