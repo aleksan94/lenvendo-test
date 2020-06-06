@@ -56,7 +56,7 @@ class CBookmarkList extends \CBitrixComponent
                         \CBookmarkAdd::ajaxOk(['LIST_PAGE_URL' => $this->arResult['LIST_PAGE_URL']]);
                 }
                 else 
-                    \CBookmarkAdd::ajaxError('Ошибка удаления. Пароли не совпадают');
+                    \CBookmarkAdd::ajaxError('Ошибка удаления. Неверный пароль');
             }
 
             die();

@@ -54,6 +54,12 @@ class CBookmarkAdd extends \CBitrixComponent
 
         if($this->checkUrlExists($url)) $this->ajaxError('Указанный URL уже существует в БД');
 
+        // если переданы пароли
+        if(isset($_REQUEST['PASSWORD']) && isset($_REQUEST['CONFIRM_PASSWORD'])) {
+            if($_REQUEST['PASSWORD'] !== $_REQUEST['CONFIRM_PASSWORD']) $this->ajaxError('Пароли не совпадают');
+            $password = md5($_REQUEST['PASSWORD']);
+        }
+
         $arPageData = $this->getPageData($url);
         if(!$arPageData) $this->ajaxError("Содержимое страницы $url не получено");
 
@@ -66,6 +72,7 @@ class CBookmarkAdd extends \CBitrixComponent
                 'FAVICON' => $arPageData['FAVICON'],
                 'META_DESCRIPTION' => $arPageData['DESCRIPTION'],
                 'META_KEYWORDS' => $arPageData['KEYWORDS'],
+                'PASSWORD' => $password,
             ]
         ];
 
