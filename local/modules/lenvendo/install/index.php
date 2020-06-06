@@ -20,18 +20,44 @@ Class Lenvendo extends \CModule
 
 	function DoInstall()
 	{
-		$this->copyFiles();
-		$this->updateIBlock();
-		$this->addMenu();
+		global $APPLICATION;
+		
+		if($_REQUEST['step'] !== 'finish') {
+			\Bitrix\Main\UI\Extension::load('jquery');
+			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", __DIR__."/step.php");
+		}
+		else {
+			// если не отмечен пункт установки примера страницы, то не копируем эти файлы
+			$this->copyFiles( $_REQUEST['addExamplePage'] !== 'Y' );
+			// установка структуры ИБ
+			$this->updateIBlock();
+			// добавляем пункт в верхнее меню, если отмечена галочка
+			if($_REQUEST['addExamplePage'] === 'Y' && $_REQUEST['addMenu'] === 'Y') 
+				$this->addMenu();
 
-		\RegisterModule($this->MODULE_ID);
+			\RegisterModule($this->MODULE_ID);	
+		}
 	}
 
 	function DoUninstall()
 	{
-		$this->removeFolders();
-		$this->deleteIBlock();
-		\UnRegisterModule($this->MODULE_ID);
+		global $APPLICATION;
+
+		if($_REQUEST['step'] !== 'finish') {
+			$APPLICATION->IncludeAdminFile("Удаление модуля lenvendo", __DIR__."/unstep.php");
+		}
+		else {
+			// удаляем данные инфоблока
+			if($_REQUEST['deleteIBlock'] === 'Y')
+				$this->deleteIBlock();
+			// удаляем файлы компонентов и, если отмечена галочка, директорию bookmark
+			$this->removeFolders($_REQUEST['deleteExampleFolder'] === 'Y');			
+			// удаляем пункт меню, если установлена галочка
+			if($_REQUEST['deleteMenu'])
+				$this->deleteMenu();
+			
+			\UnRegisterModule($this->MODULE_ID);
+		}
 	}
 
 	/**
@@ -101,7 +127,7 @@ Class Lenvendo extends \CModule
 		}
 	}
 
-	private function copyFiles()
+	private function copyFiles($excludeRoot = false)
 	{
 		$rootFolder = self::getRootFolder();
 		$filesFolder = $rootFolder."/modules/".$this->MODULE_ID."/install/files";
@@ -111,7 +137,7 @@ Class Lenvendo extends \CModule
 
 		$this->checkFolders();
 		\CopyDirFiles($local, $rootFolder, true, true);
-		\CopyDirFiles($root, $_SERVER['DOCUMENT_ROOT'], true, true);
+		if(!$excludeRoot) \CopyDirFiles($root, $_SERVER['DOCUMENT_ROOT'], true, true);
 	}
 
 	private function createPage()
@@ -132,6 +158,15 @@ Class Lenvendo extends \CModule
 		$siteID = 's1';
 
 		self::AddMenuItem($menuFile, $menuItem, $siteID);
+	}
+
+	private function deleteMenu()
+	{
+		$menuFile = "/.top.menu.php";
+		$menuLink = '/bookmark/';
+		$siteID = 's1';
+
+		self::DeleteMenuItem($menuFile, $menuLink, $siteID);
 	}
 
 	private function AddMenuItem($menuFile, $menuItem, $siteID, $pos = -1) {
@@ -175,6 +210,18 @@ Class Lenvendo extends \CModule
 
 	        \CFileMan::SaveMenu(array($siteID, $menuFile), $arMenuItems, $menuTemplate);
 	    }
+	}
+
+	public function checkExampleMenuExists()
+	{
+		\CModule::IncludeModule("fileman");
+
+		$menu = $_SERVER['DOCUMENT_ROOT']."/.top.menu.php";
+		$arResult = \CFileMan::GetMenuArray($menu);
+		$aMenuLinks = $arResult['aMenuLinks'];
+		$links = array_column($aMenuLinks, 1);
+
+		return in_array('/'.self::IBLOCK_CODE.'/', $links);
 	}
 
 	private function updateIBlock()
@@ -293,14 +340,15 @@ Class Lenvendo extends \CModule
 		return str_replace("\\", "/", __DIR__);
 	}
 
-	private function removeFolders()
+	private function removeFolders($deleteExample = true)
 	{
 		$rootFolder = self::getRootFolder();
 
 		$arFolders = [
 			$rootFolder."/components/".$this->MODULE_ID,
-			$_SERVER['DOCUMENT_ROOT']."/".self::IBLOCK_CODE,
 		];
+		if($deleteExample)
+			$arFolders[] = $_SERVER['DOCUMENT_ROOT']."/".self::IBLOCK_CODE;
 
 		foreach($arFolders as $folder) {
 			\Bitrix\Main\IO\Directory::deleteDirectory($folder);
