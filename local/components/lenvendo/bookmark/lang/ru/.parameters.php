@@ -6,3 +6,6 @@ $MESS["BOOKMARK_ITEM_ADD_DESC"] = "Страница добавления";
 $MESS["BOOKMARK_GROUP_PAGINATION_SETTINGS"] = "Пагинация";
 $MESS["BOOKMARK_SHOW_PAGINATION"] = "Выводить пагинацию?";
 $MESS["BOOKMARK_PAGINATION_PAGE_SIZE"] = "Количество элементов на странице";
+
+$MESS["BOOKMARK_GROUP_SORT"] = "Сортировка";
+$MESS["BOOKMARK_USE_SORT"] = "Включить сортировку?";

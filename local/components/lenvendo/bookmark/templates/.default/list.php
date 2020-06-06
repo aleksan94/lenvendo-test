@@ -3,6 +3,7 @@
 $params = [
 	'SHOW_PAGINATION' => $arParams['SHOW_PAGINATION'],
 	'PAGE_SIZE' => $arParams['PAGE_SIZE'],
+	'USE_SORT' => $arParams['USE_SORT'],
 ];
 $params = array_merge($arResult, $params);
 

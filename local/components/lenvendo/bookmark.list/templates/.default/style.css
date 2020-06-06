@@ -1,3 +1,6 @@
+.bookmark-list__sort {
+	cursor: pointer;
+}
 .bookmark-list__sort.asc:after {
 	content: "\2191";
 	margin-left: 4px;

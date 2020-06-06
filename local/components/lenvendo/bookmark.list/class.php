@@ -105,4 +105,21 @@ class CBookmarkList extends \CBitrixComponent
         else 
             return $defaultSort;
     }
+
+    public function showHeadSpan($key, $title)
+    {
+        $sort = $this->getSort();
+        $nowKey = reset( array_keys( $sort ) );
+        $nowValue = strtolower( reset( $sort ) );
+
+        ob_start();
+        ?>
+        <? if($this->arParams['USE_SORT'] === 'Y'): ?>
+            <span class="bookmark-list__sort<?=$nowKey === $key ? ' '.$nowValue : ''?>" data-key="<?=$key?>"><?=$title?></span>
+        <?else:?>
+            <span><?=$title?></span>
+        <? endif; ?>
+        <?
+        echo ob_get_clean();
+    }
 }

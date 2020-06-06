@@ -12,14 +12,16 @@
 			<table class="table table-hover">
 				<thead>
 					<th>
-						<span class="bookmark-list__sort<?=$arResult['SORT_KEY'] === 'DATE_CREATE' ? ' '.strtolower($arResult['SORT']) : ''?>" data-key="DATE_CREATE">Дата добавления</span>
-					</th>
-					<th>Favicon</th>
-					<th>
-						<span class="bookmark-list__sort<?=$arResult['SORT_KEY'] === 'PROPERTY_URL' ? ' '.strtolower($arResult['SORT']) : ''?>" data-key="PROPERTY_URL">URL страницы</span>
+						<? $this->__component->showHeadSpan('DATE_CREATE', 'Дата добавления'); ?>
 					</th>
 					<th>
-						<span class="bookmark-list__sort<?=$arResult['SORT_KEY'] === 'NAME' ? ' '.strtolower($arResult['SORT']) : ''?>" data-key="NAME">Заголовок страницы</span>
+						<span>Favicon</span>
+					</th>
+					<th>
+						<? $this->__component->showHeadSpan('PROPERTY_URL', 'URL страницы'); ?>
+					</th>
+					<th>
+						<? $this->__component->showHeadSpan('NAME', 'Заголовок страницы'); ?>
 					</th>
 				</thead>
 				<tbody>
