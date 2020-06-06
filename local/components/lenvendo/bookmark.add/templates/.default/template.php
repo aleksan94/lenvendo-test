@@ -14,7 +14,7 @@
 			<input type="text" name="URL" id="url" class="form-control">
 		</div>
 		<div>
-			<input type="button" name="add" value="Добавить" class="btn btn-info" onclick="CBookmarkAdd.addUrl()">
+			<input type="button" name="add" value="Добавить" class="btn btn-info" onclick="CBookmarkAdd.addUrl.call(this)">
 		</div>
 	</div>
 </div>
