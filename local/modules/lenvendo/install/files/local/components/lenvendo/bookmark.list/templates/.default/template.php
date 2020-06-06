@@ -7,8 +7,8 @@
 		<button class="btn btn-info" onclick="location.href='<?=$arResult['ADD_PAGE_URL']?>'">Добавить</button>
 	</div>
 
-	<div class="mt-3">
-		<? if($arResult['ITEMS']): ?>
+	<? if($arResult['ITEMS']): ?>
+		<div class="mt-3">
 			<table class="table table-hover">
 				<thead>
 					<th>Дата добавления</th>
@@ -31,19 +31,23 @@
 					<? endforeach; ?>			
 				</tbody>
 			</table>
-		<? endif; ?>
-	</div>
+		</div>
 
-	<div>
-		<? $APPLICATION->IncludeComponent(
-			'lenvendo:pagination', 
-			'bookmark', 
-			[
-				'PAGE_SIZE' => $arResult['PAGE_SIZE'],
-				//'MAX_PAGES' => 5, 
-				'PAGE_KEY' => 'page', 
-				'COUNT_ITEMS' => $arResult['COUNT_ITEMS'],
-			]); 
-		?>
-	</div>
+		<div>
+			<? $APPLICATION->IncludeComponent(
+				'lenvendo:pagination', 
+				'bookmark', 
+				[
+					'PAGE_SIZE' => $arResult['PAGE_SIZE'],
+					//'MAX_PAGES' => 5, 
+					'PAGE_KEY' => 'page', 
+					'COUNT_ITEMS' => $arResult['COUNT_ITEMS'],
+				]); 
+			?>
+		</div>
+	<? else: ?>
+		<div class="text-center p-2">
+			<h3 class="text-info">Список закладок пока пуст</h3>
+		</div>
+	<? endif; ?>
 </div>

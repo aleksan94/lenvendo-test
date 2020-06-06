@@ -16,9 +16,11 @@ const CBookmarkAdd =
 					URL: url
 				},
 				beforeSend: function() {
-					obj.attr('disabled', true);
+					obj.prop('disabled', true);
 				},
 				success: function(res) {
+					obj.prop('disabled', false);
+
 					let isOk = !!res.status && res.status === 'ok';
 					let data = !!res.data ? res.data : false;
 					let message = !!res.message ? res.message : false;
