@@ -202,12 +202,12 @@ class CBookmarkAdd extends \CBitrixComponent
         echo json_encode($response);
         die();
     }
-    private function ajaxOk($data)
+    public function ajaxOk($data)
     {
-        $this->ajaxRespone(['status' => 'ok', 'data' => $data]);
+        self::ajaxRespone(['status' => 'ok', 'data' => $data]);
     }
-    private function ajaxError($message)
+    public function ajaxError($message)
     {
-        $this->ajaxRespone(['status' => 'error', 'message' => $message]);
+        self::ajaxRespone(['status' => 'error', 'message' => $message]);
     }
 }
