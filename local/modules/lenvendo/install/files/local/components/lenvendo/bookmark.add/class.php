@@ -54,6 +54,12 @@ class CBookmarkAdd extends \CBitrixComponent
 
         if($this->checkUrlExists($url)) $this->ajaxError('Указанный URL уже существует в БД');
 
+        // если переданы пароли
+        if(isset($_REQUEST['PASSWORD']) && isset($_REQUEST['CONFIRM_PASSWORD'])) {
+            if($_REQUEST['PASSWORD'] !== $_REQUEST['CONFIRM_PASSWORD']) $this->ajaxError('Пароли не совпадают');
+            $password = md5($_REQUEST['PASSWORD']);
+        }
+
         $arPageData = $this->getPageData($url);
         if(!$arPageData) $this->ajaxError("Содержимое страницы $url не получено");
 
@@ -66,6 +72,7 @@ class CBookmarkAdd extends \CBitrixComponent
                 'FAVICON' => $arPageData['FAVICON'],
                 'META_DESCRIPTION' => $arPageData['DESCRIPTION'],
                 'META_KEYWORDS' => $arPageData['KEYWORDS'],
+                'PASSWORD' => $password,
             ]
         ];
 
@@ -184,12 +191,12 @@ class CBookmarkAdd extends \CBitrixComponent
         return $arData;
     }
 
-    private function isAjax()
+    public function isAjax()
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST' && $_REQUEST['IS_AJAX'] === 'Y';
     }
 
-    private function getAjaxAction()
+    public function getAjaxAction()
     {
         return trim($_REQUEST['AJAX_ACTION']);
     }
@@ -202,12 +209,12 @@ class CBookmarkAdd extends \CBitrixComponent
         echo json_encode($response);
         die();
     }
-    private function ajaxOk($data)
+    public function ajaxOk($data)
     {
-        $this->ajaxRespone(['status' => 'ok', 'data' => $data]);
+        self::ajaxRespone(['status' => 'ok', 'data' => $data]);
     }
-    private function ajaxError($message)
+    public function ajaxError($message)
     {
-        $this->ajaxRespone(['status' => 'error', 'message' => $message]);
+        self::ajaxRespone(['status' => 'error', 'message' => $message]);
     }
 }

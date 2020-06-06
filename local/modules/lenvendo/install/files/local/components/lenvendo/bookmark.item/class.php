@@ -3,6 +3,7 @@
 use Bitrix\Main\UI\Extension;
 
 \CBitrixComponent::includeComponentClass('lenvendo:bookmark');
+\CBitrixComponent::includeComponentClass('lenvendo:bookmark.add');
 
 /**
  * 
@@ -27,6 +28,39 @@ class CBookmarkList extends \CBitrixComponent
     public function executeComponent()
     {
         $this->prepareResult();
+
+        if(\CBookmarkAdd::isAjax()) {
+            $action = \CBookmarkAdd::getAjaxAction();
+
+            if($action === 'deleteBookmark') {
+                \Bitrix\Main\Loader::includeModule('iblock');
+
+                $ID = $_REQUEST['ID'];
+                $password = $_REQUEST['PASSWORD'];
+
+                if(!$ID) \CBookmarkAdd::ajaxError('Не передан ID закладки');
+
+                $bookmark = \CIBlockElement::GetList([], ['ID' => $ID], false, ['nTopCount' => 1], ['ID', 'PROPERTY_PASSWORD'])->Fetch();
+                if(!$bookmark) \CBookmarkAdd::ajaxError('Закладка с ID '.$ID.' не найдена');
+                $bookmarkPassword = $bookmark['PROPERTY_PASSWORD_VALUE'];
+
+                if(
+                        !$password && !$bookmarkPassword 
+                    || md5($password) == $bookmarkPassword) 
+                {
+                    $blEl = new \CIBlockElement();
+                    $res = $blEl->Delete($ID);
+                    if(!$res)
+                        \CBookmarkAdd::ajaxError($blEl->LAST_ERROR);    
+                    else
+                        \CBookmarkAdd::ajaxOk(['LIST_PAGE_URL' => $this->arResult['LIST_PAGE_URL']]);
+                }
+                else 
+                    \CBookmarkAdd::ajaxError('Ошибка удаления. Неверный пароль');
+            }
+
+            die();
+        }
 
         Extension::load('ui.bootstrap4');
 

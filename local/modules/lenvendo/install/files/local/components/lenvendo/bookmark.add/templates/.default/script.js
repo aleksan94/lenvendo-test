@@ -6,15 +6,27 @@ const CBookmarkAdd =
 
 		let url = $('input[name="URL"]').val();
 
+		let data = {
+			IS_AJAX: 'Y',
+			AJAX_ACTION: 'addUrl',
+			URL: url
+		}
+
+		let passwordBlock = $('#passwordBlock');
+		let isShow = passwordBlock.is(':visible');
+		if(isShow) {
+			let password = $('input[name="PASSWORD"]').val();
+			let confirmPassword = $('input[name="CONFIRM_PASSWORD"]').val();
+
+			data['PASSWORD'] = password;
+			data['CONFIRM_PASSWORD'] = confirmPassword;
+		}
+
 		if(url.length > 0) {
 			$.ajax({
 				url: '',
 				type: 'POST',
-				data: {
-					IS_AJAX: 'Y',
-					AJAX_ACTION: 'addUrl',
-					URL: url
-				},
+				data: data,
 				beforeSend: function() {
 					obj.prop('disabled', true);
 				},
@@ -39,5 +51,20 @@ const CBookmarkAdd =
 		else {
 			alert('Необходимо указать URL');
 		}
+	},
+
+	togglePasswordBlock: function(e)
+	{
+		e.preventDefault();
+
+		let obj = $(this);
+
+		let passwordBlock = $('#passwordBlock');
+		let isShow = passwordBlock.is(':visible');
+
+		if(isShow)
+			passwordBlock.hide();
+		else
+			passwordBlock.show();
 	}
 }

@@ -2,7 +2,7 @@
 
 <? $APPLICATION->SetTitle('Список закладок'); ?>
 
-<div>
+<div class="bookmark-list">
 	<div class="d-flex justify-content-end">
 		<button class="btn btn-info" onclick="location.href='<?=$arResult['ADD_PAGE_URL']?>'">Добавить</button>
 	</div>
@@ -11,10 +11,18 @@
 		<div class="mt-3">
 			<table class="table table-hover">
 				<thead>
-					<th>Дата добавления</th>
-					<th>Favicon</th>
-					<th>URL страницы</th>
-					<th>Заголовок страницы</th>
+					<th>
+						<? $this->__component->showHeadSpan('DATE_CREATE', 'Дата добавления'); ?>
+					</th>
+					<th>
+						<span>Favicon</span>
+					</th>
+					<th>
+						<? $this->__component->showHeadSpan('PROPERTY_URL', 'URL страницы'); ?>
+					</th>
+					<th>
+						<? $this->__component->showHeadSpan('NAME', 'Заголовок страницы'); ?>
+					</th>
 				</thead>
 				<tbody>
 					<? foreach($arResult['ITEMS'] as $item): ?>

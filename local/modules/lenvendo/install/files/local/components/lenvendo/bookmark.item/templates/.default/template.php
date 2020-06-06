@@ -6,6 +6,12 @@
 	<a href="<?=$arResult['LIST_PAGE_URL']?>"><< Список</a>
 </div>
 
+<div class="mt-3 mb-3">
+	<div class="d-flex justify-content-end">
+		<button class="btn btn-danger" id="deleteBookmark" data-id=<?=$arResult['ITEM']['ID']?>>Удалить</button>
+	</div>
+</div>
+
 <h1><?=$arResult['ITEM']['NAME']?></h1>
 
 <div class="bookmark-item">
@@ -43,3 +49,5 @@
 		<div><?=$arResult['ITEM']['META_KEYWORDS']?></div>
 	</div>
 </div>
+
+<? include(__DIR__."/modal/delete.php"); ?>

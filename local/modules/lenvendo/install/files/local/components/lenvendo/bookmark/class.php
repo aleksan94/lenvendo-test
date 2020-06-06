@@ -183,11 +183,9 @@ class CBookmark extends \CBitrixComponent
     	return $this;
     }
 
-    public function getData($id = false, $page = 1, $nPageSize = 20)
+    public function getData($id = false, $page = 1, $nPageSize = 20, $sort = ['DATE_CREATE' => 'DESC'])
     {
-        $arOrder = [
-            'DATE_CREATE' => 'DESC'
-        ];
+        $arOrder = $sort;
 
         $arFilter = [
             'IBLOCK_CODE' => self::IBLOCK_CODE_BOOKMARK,
