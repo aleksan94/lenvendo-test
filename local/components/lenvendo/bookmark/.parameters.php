@@ -17,6 +17,11 @@ $arComponentParameters = [
 				"DEFAULT" => "#ELEMENT_ID#/",
 				"VARIABLES" => ['ELEMENT_ID'],
 			],
+			"add" => [
+				"NAME" => GetMessage("BOOKMARK_ITEM_ADD_DESC"),
+				"DEFAULT" => "add/",
+				"VARIABLES" => [],
+			],
 		],
 	],
 ];
