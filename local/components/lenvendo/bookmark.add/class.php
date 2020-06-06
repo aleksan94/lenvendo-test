@@ -184,12 +184,12 @@ class CBookmarkAdd extends \CBitrixComponent
         return $arData;
     }
 
-    private function isAjax()
+    public function isAjax()
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST' && $_REQUEST['IS_AJAX'] === 'Y';
     }
 
-    private function getAjaxAction()
+    public function getAjaxAction()
     {
         return trim($_REQUEST['AJAX_ACTION']);
     }

@@ -2,7 +2,7 @@
 
 <? $APPLICATION->SetTitle('Список закладок'); ?>
 
-<div>
+<div class="bookmark-list">
 	<div class="d-flex justify-content-end">
 		<button class="btn btn-info" onclick="location.href='<?=$arResult['ADD_PAGE_URL']?>'">Добавить</button>
 	</div>
@@ -11,10 +11,16 @@
 		<div class="mt-3">
 			<table class="table table-hover">
 				<thead>
-					<th>Дата добавления</th>
+					<th>
+						<span class="bookmark-list__sort<?=$arResult['SORT_KEY'] === 'DATE_CREATE' ? ' '.strtolower($arResult['SORT']) : ''?>" data-key="DATE_CREATE">Дата добавления</span>
+					</th>
 					<th>Favicon</th>
-					<th>URL страницы</th>
-					<th>Заголовок страницы</th>
+					<th>
+						<span class="bookmark-list__sort<?=$arResult['SORT_KEY'] === 'PROPERTY_URL' ? ' '.strtolower($arResult['SORT']) : ''?>" data-key="PROPERTY_URL">URL страницы</span>
+					</th>
+					<th>
+						<span class="bookmark-list__sort<?=$arResult['SORT_KEY'] === 'NAME' ? ' '.strtolower($arResult['SORT']) : ''?>" data-key="NAME">Заголовок страницы</span>
+					</th>
 				</thead>
 				<tbody>
 					<? foreach($arResult['ITEMS'] as $item): ?>
