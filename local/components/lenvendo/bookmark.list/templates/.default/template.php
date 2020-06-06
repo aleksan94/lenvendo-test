@@ -33,6 +33,7 @@
 			</table>
 		</div>
 
+		<? if($arParams['SHOW_PAGINATION'] === 'Y'): ?>
 		<div>
 			<? $APPLICATION->IncludeComponent(
 				'lenvendo:pagination', 
@@ -45,6 +46,8 @@
 				]); 
 			?>
 		</div>
+		<? endif; ?>
+
 	<? else: ?>
 		<div class="text-center p-2">
 			<h3 class="text-info">Список закладок пока пуст</h3>
