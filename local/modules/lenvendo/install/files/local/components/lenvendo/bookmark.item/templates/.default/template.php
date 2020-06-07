@@ -36,7 +36,7 @@
 
 	<div class="bookmark-item__row d-flex">
 		<div>Заголовок страницы</div>
-		<div><?=$arResult['ITEM']['META_TITLE']?></div>
+		<div><?=$arResult['ITEM']['NAME']?></div>
 	</div>
 
 	<div class="bookmark-item__row d-flex">
