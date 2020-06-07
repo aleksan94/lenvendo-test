@@ -1,3 +1,5 @@
 /*
 !.gitignore
 !/local/
+/local/composer.lock
+/local/vendor/*

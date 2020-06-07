@@ -1,0 +1,13 @@
+.bookmark-list__sort {
+	cursor: pointer;
+}
+.bookmark-list__sort.asc:after {
+	content: "\2191";
+	margin-left: 4px;
+	font-size: 16px;
+}
+.bookmark-list__sort.desc:after {
+	content: "\2193";
+	margin-left: 4px;
+	font-size: 16px;
+}
