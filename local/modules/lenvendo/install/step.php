@@ -5,7 +5,7 @@
 	<input type="hidden" name="id" value="lenvendo">
 	<input type="hidden" name="install" value="Y">
 
-	<input type="hidden" name="step" value="finish">
+	<input type="hidden" name="step" value="installComposer">
 
 	<div>
 		<input type="checkbox" name="addExamplePage" id="addExamplePage" value="Y" checked>

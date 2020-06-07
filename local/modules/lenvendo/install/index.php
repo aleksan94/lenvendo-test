@@ -20,13 +20,23 @@ Class Lenvendo extends \CModule
 
 	function DoInstall()
 	{
-		global $APPLICATION;
-		
-		if($_REQUEST['step'] !== 'finish') {
-			\Bitrix\Main\UI\Extension::load('jquery');
-			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", __DIR__."/step.php");
+		global $APPLICATION, $step;
+
+		if($step === 'ajaxInstallComposer') {
+			self::composerRequireInstall();
+			die();
 		}
-		else {
+		
+		if(!$step) {
+			\Bitrix\Main\UI\Extension::load('jquery');
+			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", self::getDir()."/step.php");
+		}
+		else if($step === 'installComposer')
+		{
+			\Bitrix\Main\UI\Extension::load('jquery');
+			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", self::getDir()."/installComposer.php");
+		}
+		else if($step === 'finish') {
 			// если не отмечен пункт установки примера страницы, то не копируем эти файлы
 			$this->copyFiles( $_REQUEST['addExamplePage'] !== 'Y' );
 			// установка структуры ИБ
@@ -44,7 +54,7 @@ Class Lenvendo extends \CModule
 		global $APPLICATION;
 
 		if($_REQUEST['step'] !== 'finish') {
-			$APPLICATION->IncludeAdminFile("Удаление модуля lenvendo", __DIR__."/unstep.php");
+			$APPLICATION->IncludeAdminFile("Удаление модуля lenvendo", self::getDir()."/unstep.php");
 		}
 		else {
 			// удаляем данные инфоблока
@@ -363,5 +373,15 @@ Class Lenvendo extends \CModule
 
 		if($iblockID) 
 			\CIBlock::Delete($iblockID);
+	}
+
+	private function composerRequireInstall()
+	{		
+		$res = exec('php '.self::getDir().'/composer.phar require -n phpoffice/phpspreadsheet -d '.$_SERVER['DOCUMENT_ROOT'].'/local');
+	}
+
+	private function composerRequireUninstall()
+	{
+		exec('php '.self::getDir().'/composer.phar remove -n phpoffice/phpspreadsheet -d '.$_SERVER['DOCUMENT_ROOT'].'/local');	
 	}
 }
