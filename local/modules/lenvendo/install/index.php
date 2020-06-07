@@ -22,21 +22,7 @@ Class Lenvendo extends \CModule
 	{
 		global $APPLICATION, $step;
 
-		if($step === 'ajaxInstallComposer') {
-			self::composerRequireInstall();
-			die();
-		}
-		
-		if(!$step) {
-			\Bitrix\Main\UI\Extension::load('jquery');
-			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", self::getDir()."/step.php");
-		}
-		else if($step === 'installComposer')
-		{
-			\Bitrix\Main\UI\Extension::load('jquery');
-			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", self::getDir()."/installComposer.php");
-		}
-		else if($step === 'finish') {
+		if($step === 'ajaxInstall') {
 			// если не отмечен пункт установки примера страницы, то не копируем эти файлы
 			$this->copyFiles( $_REQUEST['addExamplePage'] !== 'Y' );
 			// установка структуры ИБ
@@ -45,6 +31,20 @@ Class Lenvendo extends \CModule
 			if($_REQUEST['addExamplePage'] === 'Y' && $_REQUEST['addMenu'] === 'Y') 
 				$this->addMenu();
 
+			self::composerRequireInstall();
+			die();
+		}
+		
+		if(!$step) {
+			\Bitrix\Main\UI\Extension::load('jquery');
+			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", self::getDir()."/step.php");
+		}
+		else if($step === 'installProcess')
+		{
+			\Bitrix\Main\UI\Extension::load('jquery');
+			$APPLICATION->IncludeAdminFile("Установка модуля lenvendo", self::getDir()."/installProcess.php");
+		}
+		else if($step === 'finish') {
 			\RegisterModule($this->MODULE_ID);	
 		}
 	}

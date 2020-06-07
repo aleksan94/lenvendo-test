@@ -1,4 +1,8 @@
 <form action="<?echo $APPLICATION->GetCurPage(); ?>" name="form1">
+	<? foreach($_REQUEST as $key => $value): ?>
+		<input type="hidden" name="<?=$key?>" value="<?=$value?>">
+	<? endforeach; ?>
+
 	<?echo bitrix_sessid_post(); ?>
 
 	<input type="hidden" name="lang" value="<?echo LANG ?>">
@@ -8,7 +12,11 @@
 	<input type="hidden" name="step" value="finish">
 
 	<div>
-		<div>Идёт установка зависимостей <b>composer</b>...</div>
+		<i>
+			<div>Идёт установка...</div> 
+			<div>Процесс может занять какое-то время</div> 
+			<div>Пожалуйста подождите</div>
+		</i>
 	</div>
 </form>
 
@@ -16,7 +24,7 @@
 	$(document).ready(function() {
 		let form = $('form[name="form1"]');
 		let formData = new FormData(form[0]);
-		formData.set('step', 'ajaxInstallComposer');
+		formData.set('step', 'ajaxInstall');
 
 		$.ajax({
 			url: '',
