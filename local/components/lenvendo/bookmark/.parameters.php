@@ -3,14 +3,18 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
 $arComponentParameters = [
 	"GROUPS" => [
-		"PAGINATION_SETTINGS" => array(
+		"PAGINATION_SETTINGS" => [
 			"SORT" => 1010,
 			"NAME" => GetMessage("BOOKMARK_GROUP_PAGINATION_SETTINGS"),
-		),
-		"SORT_SETTINGS" => array(
+		],
+		"SORT_SETTINGS" => [
 			"SORT" => 1020,
-			"NAME" => GetMessage("BOOKMARK_GROUP_SORT"),
-		),
+			"NAME" => GetMessage("BOOKMARK_GROUP_SORT_SETTINGS"),
+		],
+		"SETTINGS_SETTINGS" => [
+			"SORT" => 1030,
+			"NAME" => GetMessage("BOOKMARK_GROUP_SETTINGS_SETTINGS"),
+		],
 	],
 	"PARAMETERS" => [
 		"VARIABLE_ALIASES" => [
@@ -51,6 +55,14 @@ $arComponentParameters = [
 		"USE_SORT" => [
 			"PARENT" => "SORT_SETTINGS",
 			"NAME" => GetMessage("BOOKMARK_USE_SORT"),
+			"TYPE" => "CHECKBOX",
+			"DEFAULT" => "Y",
+			"REFRESH" => "Y",
+		],
+
+		"SHOW_EXPORT_TO_EXCEL" => [
+			"PARENT" => "SETTINGS_SETTINGS",
+			"NAME" => GetMessage("BOOKMARK_SHOW_EXPORT_TO_EXCEL"),
 			"TYPE" => "CHECKBOX",
 			"DEFAULT" => "Y",
 			"REFRESH" => "Y",

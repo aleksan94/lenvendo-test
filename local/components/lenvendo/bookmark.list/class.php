@@ -42,6 +42,10 @@ class CBookmarkList extends \CBitrixComponent
 
             die();
         }
+        if(\CBookmarkAdd::getAjaxAction() === 'exportToExcel') {
+            $this->exportToExcel();
+            die();
+        }                
 
         //\CJSCore::Init(["jquery"]);
         Extension::load('ui.bootstrap4');

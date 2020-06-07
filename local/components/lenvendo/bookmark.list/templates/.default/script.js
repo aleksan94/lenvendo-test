@@ -20,3 +20,17 @@ $(document).ready(function() {
 		});
 	});
 });
+
+const BookmarkList = {
+	exportToExcel: function() {
+		/*$.ajax({
+			url: '',
+			type: 'POST',
+			data: {
+				IS_AJAX: 'Y',
+				AJAX_ACTION: 'exportToExcel',
+			},
+		});*/
+		$.post('', { IS_AJAX: 'Y', AJAX_ACTION: 'exportToExcel' });
+	}
+}
