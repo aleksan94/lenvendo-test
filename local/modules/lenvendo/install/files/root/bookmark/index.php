@@ -8,9 +8,14 @@ $APPLICATION->SetTitle("Закладки");
 		"COMPONENT_TEMPLATE" => ".default",
 		"SEF_MODE" => "Y",
 		"SEF_FOLDER" => "/bookmark/",
+		"SHOW_PAGINATION" => "Y",
+		"PAGE_SIZE" => "20",
+		"USE_SORT" => "Y",
+		"SHOW_EXPORT_TO_EXCEL" => "Y",
 		"SEF_URL_TEMPLATES" => array(
 			"list" => "index.php",
 			"item" => "#ELEMENT_ID#/",
+			"add" => "add/",
 		)
 	),
 	false
