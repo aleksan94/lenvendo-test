@@ -42,6 +42,10 @@ class CBookmarkList extends \CBitrixComponent
 
             die();
         }
+        if(\CBookmarkAdd::getAjaxAction() === 'exportToExcel') {
+            $this->exportToExcel();
+            die();
+        }                
 
         //\CJSCore::Init(["jquery"]);
         Extension::load('ui.bootstrap4');
@@ -121,5 +125,45 @@ class CBookmarkList extends \CBitrixComponent
         <? endif; ?>
         <?
         echo ob_get_clean();
+    }
+
+    public function exportToExcel()
+    {
+        \Bitrix\Main\Loader::includeModule('lenvendo');
+
+        $arData = \CBookmark::getData(false, 1, false);
+        
+        $arRows = [
+            [
+                'style' => [
+                    'font' => [
+                        'bold' => true
+                    ]
+                ],
+                'items' => [
+                    ['value' => 'URL'],
+                    ['value' => 'Дата создания'],
+                    ['value' => 'Заголовок страницы'],
+                    ['value' => 'description'],
+                    ['value' => 'keywords'],
+                    ['value' => 'favicon'],
+                ]
+            ]
+        ];
+        foreach($arData as $data) {
+            $arRows[] = [
+                'items' => [
+                    ['value' => $data['URL']],
+                    ['value' => $data['DATE_CREATE']],
+                    ['value' => $data['NAME']],
+                    ['value' => $data['DESCRIPTION']],
+                    ['value' => $data['KEYWORDS']],
+                    ['value' => $data['FAVICON']],
+                ]
+            ];
+        }
+
+        $excel = new \Lenvendo\Office\Excel();
+        $excel->generateTable($arRows)->download('Bookmarks-'.date('Y-m-d-H-i-s').'.xlsx');
     }
 }

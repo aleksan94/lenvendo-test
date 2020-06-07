@@ -3,8 +3,15 @@
 <? $APPLICATION->SetTitle('Список закладок'); ?>
 
 <div class="bookmark-list">
-	<div class="d-flex justify-content-end">
-		<button class="btn btn-info" onclick="location.href='<?=$arResult['ADD_PAGE_URL']?>'">Добавить</button>
+	<div class="d-flex justify-content-between align-items-center">
+		<div>
+			<? if($arParams['SHOW_EXPORT_TO_EXCEL'] === 'Y'): ?>
+				<button class="btn btn-success btn-sm" onclick="location.href='?AJAX_ACTION=exportToExcel'">Выгрузить в Excel</button>
+			<? endif; ?>
+		</div>
+		<div>
+			<button class="btn btn-info" onclick="location.href='<?=$arResult['ADD_PAGE_URL']?>'">Добавить</button>
+		</div>
 	</div>
 
 	<? if($arResult['ITEMS']): ?>
