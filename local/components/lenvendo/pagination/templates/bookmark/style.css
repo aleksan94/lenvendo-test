@@ -1,8 +1,0 @@
-.bookmark-pagination {
-	display: flex;
-	justify-content: center;
-}
-
-.bookmark-pagination ul {
-	list-style-type: none !important;
-}
